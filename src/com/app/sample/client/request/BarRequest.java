@@ -12,6 +12,7 @@ import com.app.sample.client.request.service.BarService;
 import com.app.sample.client.request.service.BarServiceAsync;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Timer;
 
 public class BarRequest {
   private BarServiceAsync barService = GWT.create(BarService.class);
@@ -43,10 +44,18 @@ public class BarRequest {
     
     if(AppCache.isExpired(key)){
       barService.getAllBars(new Async<ArrayList<String>>(eventBus, new AsyncResponse<ArrayList<String>>() {
-        public void onSuccess(ArrayList<String> obj) {
+        public void onSuccess(final ArrayList<String> obj) {
           //Store and return
-          AppCache.store(key, obj);
-          success.onSuccess(obj);
+          
+          //DEMO TIMER
+          //Just to make sure you see the difference
+          new Timer() {
+            public void run() {
+              AppCache.store(key, obj);
+              success.onSuccess(obj);
+            }
+          }.schedule(1750);
+          
         }
         public void onFailure(Throwable caught) {
           if(failure!=null){
@@ -63,8 +72,14 @@ public class BarRequest {
     barService.addNewBar(bar, new Async<Void>(eventBus, new AsyncResponse<Void>() {
       public void onSuccess(Void obj) {
         //Clear appropriate events
-        AppCache.clearEvent(CacheClear.NEW_BAR);
-        success.onSuccess(obj);
+        
+      //DEMO TIMER
+        //Just to make sure you see the difference
+        new Timer() {
+          public void run() {
+            success.onSuccess(null);
+          }
+        }.schedule(1750);
       }
       public void onFailure(Throwable caught) {
         if(failure!=null){

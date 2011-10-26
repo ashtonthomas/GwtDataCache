@@ -14,9 +14,11 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -33,6 +35,8 @@ public class GwtDataCache implements EntryPoint {
       + "attempting to contact the server. Please check your network "
       + "connection and try again.";
 
+  private InlineLabel clickLabel;
+  
   /**
    * This is the entry point method.
    */
@@ -50,13 +54,24 @@ public class GwtDataCache implements EntryPoint {
     
     //Set up demo
     VerticalPanel vp = new VerticalPanel();
-    vp.add(new HTML("Test Get All Foo"));
+    
+    final InlineLabel label = new InlineLabel();
+    clickLabel = new InlineLabel();
+    vp.add(label);
+    vp.add(clickLabel);
+    
+    vp.add(new HTML("Test Get All Foo (Test by clicking Get All a few times and notice only the first time it requests. then click add new then get all again..."));
+    
+    
+    
     Button allFooButton = new Button("Get All Foos");
     allFooButton.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
+        click();
+        label.setText("Requesting: get all foos...");
         appRequest.fooRequest.getAllFoos(new AsyncSuccess<ArrayList<String>>() {
           public void onSuccess(ArrayList<String> obj) {
-            Window.alert("Done");
+            label.setText("done");
           }
         }, null);
       }
@@ -69,16 +84,18 @@ public class GwtDataCache implements EntryPoint {
     Button addFooButton = new Button("Test add new Foo");
     addFooButton.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
+        click();
+        label.setText("Requesting: Add New Foo . . . ");
         appRequest.fooRequest.addNewFoo("New Foo", new AsyncSuccess<Void>() {
           public void onSuccess(Void obj) {
-            Window.alert("Done");
+            label.setText("done");
           }
           
         }, new AsyncFailure() {
           public void onFailure(Throwable caught) {
           //Handle alternative flow!
             //TODO
-            Window.alert("Failed: "+caught.getMessage());
+            label.setText("request failed..");
           }
         });
       }
@@ -94,9 +111,11 @@ public class GwtDataCache implements EntryPoint {
     
     allBarButton.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
+        click();
+        label.setText("Requesting: get all bars...");
         appRequest.barRequest.getAllBars(new AsyncSuccess<ArrayList<String>>() {
           public void onSuccess(ArrayList<String> obj) {
-            Window.alert("Done");
+            label.setText("done");
           }
         }, null);
       }
@@ -108,9 +127,11 @@ public class GwtDataCache implements EntryPoint {
     Button addBarButton = new Button("Add Bar");
     addBarButton.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
+        click();
+        label.setText("Requesting: add enw bar...");
         appRequest.barRequest.addNewBar("New Bar", new AsyncSuccess<Void>() {
           public void onSuccess(Void obj) {
-            Window.alert("Done");
+            label.setText("done");
           }
         }, new AsyncFailure() {
           public void onFailure(Throwable caught) {
@@ -124,6 +145,15 @@ public class GwtDataCache implements EntryPoint {
     vp.add(addBarButton);
     
     RootLayoutPanel.get().add(vp);
+  }
+  
+  public void click(){
+    clickLabel.setText("Click!");
+    new Timer() {
+      public void run() {
+        clickLabel.setText("");
+      }
+    }.schedule(1000);
   }
   
 }
