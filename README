@@ -1,0 +1,4 @@
+GetDataCache
+
+This is a sample project that shows one way to implement client side caching as a middle layer between GWT Activities and the GWT-RPC Servlets.
+
