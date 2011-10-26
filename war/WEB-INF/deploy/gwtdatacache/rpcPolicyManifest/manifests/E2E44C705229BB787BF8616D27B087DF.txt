@@ -1,0 +1,2 @@
+serviceClass: com.app.sample.client.request.service.FooService
+path: 0B8E4B6FDE42D890286BA65B273EA873.gwt.rpc

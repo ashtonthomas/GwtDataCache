@@ -1,0 +1,2 @@
+serviceClass: com.app.sample.client.request.service.BarService
+path: 60A6A16533430CCDE2BFEF620E596EE2.gwt.rpc
