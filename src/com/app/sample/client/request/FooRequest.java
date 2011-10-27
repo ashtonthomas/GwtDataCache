@@ -33,7 +33,7 @@ public class FooRequest {
     final String key = "fr-al-str-getAllFoos";
     
     //Set any possible clear events
-    AppCache.cacheClear(key, CacheClear.NEW_BAR);
+    AppCache.cacheClear(key, CacheClear.NEW_FOO);
     
     if(AppCache.isExpired(key)){
       fooService.getAllFoos(new Async<ArrayList<String>>(eventBus, new AsyncResponse<ArrayList<String>>() {
@@ -69,7 +69,7 @@ public class FooRequest {
         new Timer() {
           public void run() {
           //Clear appropriate events
-            AppCache.clearEvent(CacheClear.NEW_BAR);
+            AppCache.clearEvent(CacheClear.NEW_FOO);
             success.onSuccess(null);
           }
         }.schedule(1750);

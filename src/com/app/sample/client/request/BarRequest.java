@@ -77,6 +77,7 @@ public class BarRequest {
         //Just to make sure you see the difference
         new Timer() {
           public void run() {
+            AppCache.clearEvent(CacheClear.NEW_BAR);
             success.onSuccess(null);
           }
         }.schedule(1750);
